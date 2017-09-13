@@ -40,8 +40,9 @@ GtkWidget* GUI::createGrid(GtkWidget* fixed, int x, int y)
 GtkWidget* GUI::createButton(GtkWidget* grid, int x, int y, int w, int h)
 {
   GtkWidget* temp = gtk_toggle_button_new();
-
+  gtk_widget_set_size_request(temp, w, h);
   gtk_grid_attach(GTK_GRID(grid), temp, x*w, y*h, w, h);
+  gtk_widget_set_name(temp, "button");
   return temp;
 }
 

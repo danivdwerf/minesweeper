@@ -6,14 +6,15 @@
 #define ROWS 10
 #define COLUMNS 10
 
-#define BUTTON_WIDTH 15
-#define BUTTON_HEIGHT 15
+#define BUTTON_WIDTH 30
+#define BUTTON_HEIGHT 30
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
 #define APP_NAME "Minesweeper"
 
-unsigned int test = 0;
+bool gameOver;
+
 
 struct Button
 {
@@ -24,10 +25,7 @@ struct Button
   int nearbyMines;
   bool isDown;
 
-  void print()
-  {
-    std::cout << "[x: " << this->x << " y:" << this->y  << " mines nearby: " << this->nearbyMines << " button: " << this->button << "]" << '\n';
-  }
+  void print(){std::cout << "[x: " << this->x << " y:" << this->y  << " mines nearby: " << this->nearbyMines << " button: " << this->button << "]" << '\n';}
 };
 
 GtkWidget* window;
@@ -45,9 +43,6 @@ void swapImage(Button* fieldButton)
     gtk_button_set_image(GTK_BUTTON(fieldButton->button), textureManager->getTexture(MINE));
     return;
   }
-
-  if(fieldButton->nearbyMines == 0)
-    return;
 
   if(fieldButton->nearbyMines == 1)
   {
@@ -96,11 +91,25 @@ void swapImage(Button* fieldButton)
     gtk_button_set_image(GTK_BUTTON(fieldButton->button), textureManager->getTexture(EIGHT));
     return;
   }
+
+  gtk_button_set_image(GTK_BUTTON(fieldButton->button), textureManager->getTexture(EMPTY));
+}
+
+void showMines()
+{
+  for(int i = 0; i < COLUMNS; i++)
+  {
+    for(int j = 0; j < ROWS; j++)
+    {
+      if(field[i][j].isMine)
+        swapImage(&field[i][j]);
+    }
+  }
+  gameOver = true;
 }
 
 void showBlocks(Button* currentMine)
 {
-  currentMine->print();
   if(currentMine->isDown)
     return;
 
@@ -108,15 +117,14 @@ void showBlocks(Button* currentMine)
 
   if(currentMine->isMine)
   {
-    swapImage(currentMine);
+    showMines();
     return;
   }
 
+  swapImage(currentMine);
+
   if(currentMine->nearbyMines)
-  {
-    swapImage(currentMine);
     return;
-  }
 
   if(currentMine->y > 0)
     showBlocks(&field[currentMine->x][currentMine->y-1]);
@@ -130,6 +138,9 @@ void showBlocks(Button* currentMine)
 
 void onButtonClick(GtkWidget* button, gpointer* data)
 {
+  if(gameOver)
+    return;
+
   Button* clickedButton = (Button*)data;
   showBlocks(clickedButton);
 }
@@ -161,6 +172,7 @@ void createField()
       currentMine->y = j;
       currentMine->isDown = false;
       currentMine->button = gui->createButton(grid, i, j, BUTTON_WIDTH, BUTTON_HEIGHT);
+      gtk_button_set_image(GTK_BUTTON(currentMine->button), textureManager->getTexture(NORMAL));
       g_signal_connect(currentMine->button, "clicked", G_CALLBACK(onButtonClick), currentMine);
     }
   }
@@ -179,22 +191,28 @@ void createField()
 
 int main(int argc, char* argv[])
 {
-  // srand(time(NULL));
+  srand(time(NULL));
   gtk_init(&argc, &argv);
 
   window = gui->createWindow(WINDOW_WIDTH, WINDOW_HEIGHT, false, APP_NAME, 10);
   fixed = gui->createContainer(window);
   grid = gui->createGrid(fixed, 0, 0);
 
-  textureManager->loadTexture("Assets/mine.png", MINE);
-  textureManager->loadTexture("Assets/1.png", ONE);
-  textureManager->loadTexture("Assets/2.png", TWO);
-  textureManager->loadTexture("Assets/3.png", THREE);
-  textureManager->loadTexture("Assets/4.png", FOUR);
-  textureManager->loadTexture("Assets/5.png", FIVE);
-  textureManager->loadTexture("Assets/6.png", SIX);
-  textureManager->loadTexture("Assets/7.png", SEVEN);
-  textureManager->loadTexture("Assets/8.png", EIGHT);
+  gui->setStylesheet("Assets/stylesheet.css");
+
+  gameOver = false;
+
+  textureManager->loadTexture("Assets/mine.png", MINE, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture("Assets/1.png", ONE, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture("Assets/2.png", TWO, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture("Assets/3.png", THREE, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture("Assets/4.png", FOUR, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture("Assets/5.png", FIVE, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture("Assets/6.png", SIX, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture("Assets/7.png", SEVEN, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture("Assets/8.png", EIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture("Assets/empty.png", EMPTY, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture("Assets/clean.png", NORMAL, BUTTON_WIDTH, BUTTON_HEIGHT);
 
   createField();
 

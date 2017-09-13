@@ -7,7 +7,9 @@
 
 enum Texture{
   MINE,
+  NORMAL,
   EMPTY,
+  FLAG,
   ONE,
   TWO,
   THREE,
@@ -21,7 +23,7 @@ enum Texture{
 class TextureManager
 {
   public: GtkWidget* getTexture(Texture);
-  public: void loadTexture(const char*, Texture);
+  public: void loadTexture(const char*, Texture, int, int);
   private: std::map<Texture, GdkPixbuf*> textures;
 };
 #endif
