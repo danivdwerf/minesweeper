@@ -9,6 +9,7 @@ I chose c++, because I find it to be rather fast and because c++ is my prefered 
 I worked in Atom and did the GUI with the <a href="https://www.gtk.org/">GTK+ library</a>.
 
 Portfolio: <a href="http://www.freetimedev.com">www.freetimedev.com</a>
+<br />
 MacOS installation:
 <br />
 Download the game <a href="http://www.freetimedev.com/resources/projects/Minesweeper/Minesweeper.dmg">here</a>,
