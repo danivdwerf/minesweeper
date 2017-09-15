@@ -38,19 +38,21 @@ class Game
   private: GtkWidget* window;
   private: GtkWidget* fixed;
   private: GtkWidget* grid;
+  private: void(*test)(GtkWidget*, GdkEventButton*, gpointer);
 
-  public: Button field[COLUMNS][ROWS];
-  public: unsigned int totalMines;
-  public: bool gameOver;
+  private: Button field[COLUMNS][ROWS];
+  private: unsigned int totalMines;
+  private: bool gameOver;
+  public: bool GameOver(){return gameOver;};
 
   public: Game();
-  public: void init(void(*)(GtkWidget*, GdkEventKey*, gpointer));
-  public: void startGame(void(*)(GtkWidget*, GdkEventButton*, gpointer));
-  public: int findConnectedMines(int, int);
+  public: void init(void(*)(GtkWidget*, GdkEventKey*, gpointer), void(*)(GtkWidget*, GdkEventButton*, gpointer));
+  public: void startGame();
+  private: int findConnectedMines(int, int);
   public: void switchFlag(Button*);
   public: void showBlocks(Button*);
-  public: void showMines();
-  public: void swapImage(Button*);
+  private: void showMines();
+  private: void swapImage(Button*);
   public: void checkForWin();
 };
 #endif

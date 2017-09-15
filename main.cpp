@@ -6,7 +6,7 @@ Game* game = new Game();
 
 void onButtonClick(GtkWidget* widget, GdkEventButton* event, gpointer data)
 {
-  if(game->gameOver) return;
+  if(game->GameOver()) return;
 
   if(event->type != GDK_BUTTON_PRESS)
     return;
@@ -24,15 +24,15 @@ void onButtonClick(GtkWidget* widget, GdkEventButton* event, gpointer data)
 void onKeyPress(GtkWidget* widget, GdkEventKey* event, gpointer data)
 {
   if(event->keyval == 114)
-    game->startGame(onButtonClick);
+    game->startGame();
 }
 
 int main(int argc, char* argv[])
 {
   gtk_init(&argc, &argv);
 
-  game->init(onKeyPress);
-  game->startGame(onButtonClick);
+  game->init(onKeyPress, onButtonClick);
+  game->startGame();
 
   gtk_main();
   return 0;

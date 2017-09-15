@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <csignal>
 
 Game::Game()
 {
@@ -7,12 +8,14 @@ Game::Game()
   this->textureManager = new TextureManager();
 }
 
-void Game::init(void(*keyCallback)(GtkWidget*, GdkEventKey*, gpointer))
+void Game::init(void(*keyCallback)(GtkWidget*, GdkEventKey*, gpointer), void(*buttonCallback)(GtkWidget*, GdkEventButton*, gpointer))
 {
   this->window = gui->createWindow(WINDOW_WIDTH, WINDOW_HEIGHT, false, APP_NAME, 10);
   g_signal_connect (G_OBJECT (this->window), "key_release_event", G_CALLBACK (keyCallback), NULL);
   this->fixed = gui->createContainer(window);
   this->grid = gui->createGrid(this->fixed, 0, 0);
+
+  this->test = buttonCallback;
 
   gui->setStylesheet("Assets/stylesheet.css");
 
@@ -32,6 +35,45 @@ void Game::init(void(*keyCallback)(GtkWidget*, GdkEventKey*, gpointer))
   gtk_widget_show_all(this->window);
 }
 
+void Game::startGame()
+{
+  this->totalMines = 0;
+  this->gameOver = false;
+  Button* currentMine;
+
+  for(int i = 0; i < COLUMNS; i++)
+  {
+    for(int j = 0; j < ROWS; j++)
+    {
+      currentMine = &this->field[i][j];
+      currentMine->isMine = false;
+      currentMine->flagged = false;
+      currentMine->isDown = false;
+      currentMine->x = i;
+      currentMine->y = j;
+
+      currentMine->isMine = (rand() % 100 < 3) ? true : false;
+      if(currentMine->isMine == true) this->totalMines++;
+
+      if(!currentMine->button)
+        currentMine->button = gui->createButton(this->grid, i, j, BUTTON_WIDTH, BUTTON_HEIGHT);
+
+      gtk_widget_show(currentMine->button);
+      gtk_button_set_image(GTK_BUTTON(currentMine->button), textureManager->getTexture(NORMAL));
+      g_signal_connect (currentMine->button, "button_press_event", G_CALLBACK(this->test),  currentMine);
+    }
+  }
+
+  for(int i = 0; i < COLUMNS; i++)
+  {
+    for(int j = 0; j < ROWS; j++)
+    {
+      currentMine = &this->field[i][j];
+      currentMine->nearbyMines = findConnectedMines(currentMine->x, currentMine->y);
+    }
+  }
+}
+
 int Game::findConnectedMines(int x, int y)
 {
   int bombs = 0;
@@ -44,40 +86,6 @@ int Game::findConnectedMines(int x, int y)
     }
   }
   return (bombs);
-}
-
-void Game::startGame(void(*buttonCallback)(GtkWidget*, GdkEventButton*, gpointer))
-{
-  this->totalMines = 0;
-  this->gameOver = false;
-  Button* currentMine;
-  for(int i = 0; i < COLUMNS; i++)
-  {
-    for(int j = 0; j < ROWS; j++)
-    {
-      currentMine = &this->field[i][j];
-      currentMine->isMine = (rand() % 100 < 3) ? true : false;
-      if(currentMine->isMine == true) this->totalMines++;
-      currentMine->x = i;
-      currentMine->y = j;
-      currentMine->flagged = false;
-      currentMine->isDown = false;
-      if(currentMine->button) gui->destroyWidget(currentMine->button);
-      currentMine->button = gui->createButton(this->grid, i, j, BUTTON_WIDTH, BUTTON_HEIGHT);
-      gtk_button_set_image(GTK_BUTTON(currentMine->button), textureManager->getTexture(NORMAL));
-      g_signal_connect (currentMine->button, "button_press_event", G_CALLBACK(buttonCallback),  currentMine);
-    }
-  }
-
-  for(int i = 0; i < COLUMNS; i++)
-  {
-    for(int j = 0; j < ROWS; j++)
-    {
-      currentMine = &this->field[i][j];
-      currentMine->nearbyMines = findConnectedMines(currentMine->x, currentMine->y);
-    }
-  }
-  gtk_widget_show_all(window);
 }
 
 void Game::switchFlag(Button* currentMine)
@@ -138,7 +146,16 @@ void Game::showMines()
         swapImage(&field[i][j]);
     }
   }
+
   this->gameOver = true;
+  GtkWidget* popup = gui->createDialog("You Lose :(", this->window);
+  int response = gtk_dialog_run(GTK_DIALOG(popup));
+  if(response == GTK_RESPONSE_OK)
+    this->startGame();
+  else
+    gtk_main_quit();
+
+  gui->destroyWidget(popup);
 }
 
 void Game::swapImage(Button* fieldButton)
@@ -208,25 +225,27 @@ void Game::swapImage(Button* fieldButton)
 
 void Game::checkForWin()
 {
-  unsigned int mines = 0;
+  unsigned int possibleMines = 0;
   for(int i = 0; i < COLUMNS; i++)
   {
     for(int j = 0; j < ROWS; j++)
     {
       if(this->field[i][j].isDown == false || this->field[i][j].flagged == true)
-        mines++;
+        possibleMines++;
     }
   }
 
-  if(mines != this->totalMines)
+  if(possibleMines != this->totalMines)
     return;
 
-  // GtkWidget* popup = gui->createDialog("You Win!", window, NULL);
-  // int response = gtk_dialog_run(GTK_DIALOG(popup));
-  // if(response == GTK_RESPONSE_OK)
-  // {
-    // std::cout << "retry" << '\n';
-    // gui->destroyWidget(popup);
-    // createField();
-  // }
+  this->gameOver = true;
+  
+  GtkWidget* popup = gui->createDialog("You Win :)", this->window);
+  int response = gtk_dialog_run(GTK_DIALOG(popup));
+  if(response == GTK_RESPONSE_OK)
+    this->startGame();
+  else
+    gtk_main_quit();
+
+  gui->destroyWidget(popup);
 }
