@@ -22,7 +22,9 @@ GtkWidget* GUI::createWindow(int width, int height, bool rezisable, std::string 
 
 GtkWidget* GUI::createDialog(const char* title, GtkWidget* parentWindow)
 {
-  GtkWidget* temp = gtk_dialog_new_with_buttons(title, GTK_WINDOW(parentWindow), GTK_DIALOG_MODAL, ("_Retry"), GTK_RESPONSE_OK, ("_Quit"), GTK_RESPONSE_REJECT, NULL);
+  // GtkWidget* temp = gtk_dialog_new_with_buttons(title, GTK_WINDOW(parentWindow), GTK_DIALOG_MODAL, ("_Retry"), GTK_RESPONSE_OK, ("_Quit"), GTK_RESPONSE_REJECT, NULL);
+  // return temp;
+  GtkWidget* temp = gtk_message_dialog_new (GTK_WINDOW(parentWindow), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, title, NULL);
   return temp;
 }
 

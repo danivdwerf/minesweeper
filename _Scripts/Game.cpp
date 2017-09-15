@@ -1,5 +1,4 @@
 #include "Game.h"
-#include <csignal>
 
 Game::Game()
 {
@@ -90,6 +89,7 @@ int Game::findConnectedMines(int x, int y)
 
 void Game::switchFlag(Button* currentMine)
 {
+  if(this->gameOver) return;
   if(currentMine->isDown) return;
 
   if(currentMine->flagged)
@@ -106,6 +106,7 @@ void Game::switchFlag(Button* currentMine)
 
 void Game::showBlocks(Button* currentMine)
 {
+  if(this->gameOver) return;
   if(currentMine->isDown)
     return;
 
@@ -148,14 +149,7 @@ void Game::showMines()
   }
 
   this->gameOver = true;
-  GtkWidget* popup = gui->createDialog("You Lose :(", this->window);
-  int response = gtk_dialog_run(GTK_DIALOG(popup));
-  if(response == GTK_RESPONSE_OK)
-    this->startGame();
-  else
-    gtk_main_quit();
-
-  gui->destroyWidget(popup);
+  this->showPopup("You Lose :(");
 }
 
 void Game::swapImage(Button* fieldButton)
@@ -223,9 +217,21 @@ void Game::swapImage(Button* fieldButton)
   gtk_button_set_image(GTK_BUTTON(fieldButton->button), textureManager->getTexture(EMPTY));
 }
 
+void Game::showPopup(const char* title)
+{
+  GtkWidget* popup = gui->createDialog(title, this->window);
+  auto response = gtk_dialog_run(GTK_DIALOG(popup));
+  if(response == GTK_RESPONSE_OK)
+    this->startGame();
+  else
+    gtk_main_quit();
+
+  gui->destroyWidget(popup);
+}
+
 void Game::checkForWin()
 {
-  unsigned int possibleMines = 0;
+  int possibleMines = 0;
   for(int i = 0; i < COLUMNS; i++)
   {
     for(int j = 0; j < ROWS; j++)
@@ -239,13 +245,5 @@ void Game::checkForWin()
     return;
 
   this->gameOver = true;
-  
-  GtkWidget* popup = gui->createDialog("You Win :)", this->window);
-  int response = gtk_dialog_run(GTK_DIALOG(popup));
-  if(response == GTK_RESPONSE_OK)
-    this->startGame();
-  else
-    gtk_main_quit();
-
-  gui->destroyWidget(popup);
+  this->showPopup("You Win :)");
 }

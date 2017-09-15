@@ -53,6 +53,7 @@ class Game
   public: void showBlocks(Button*);
   private: void showMines();
   private: void swapImage(Button*);
-  public: void checkForWin();
+  private: void checkForWin();
+  private: void showPopup(const char*);
 };
 #endif
