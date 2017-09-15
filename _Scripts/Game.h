@@ -7,8 +7,8 @@
 #define BUTTON_WIDTH 30
 #define BUTTON_HEIGHT 30
 
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 480
+#define WINDOW_WIDTH COLUMNS*BUTTON_WIDTH
+#define WINDOW_HEIGHT ROWS*BUTTON_HEIGHT
 #define APP_NAME "Minesweeper"
 
 #include <gtk/gtk.h>
@@ -16,6 +16,7 @@
 
 #include "gui.h"
 #include "TextureManager.h"
+#include "Resources.h"
 
 struct Button
 {
@@ -33,6 +34,7 @@ struct Button
 class Game
 {
   private: GUI* gui;
+  private: Resources* resources;
   private: TextureManager* textureManager;
 
   private: GtkWidget* window;

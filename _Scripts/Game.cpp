@@ -4,6 +4,7 @@ Game::Game()
 {
   srand(time(NULL));
   this->gui = new GUI();
+  this->resources = new Resources();
   this->textureManager = new TextureManager();
 }
 
@@ -18,18 +19,18 @@ void Game::init(void(*keyCallback)(GtkWidget*, GdkEventKey*, gpointer), void(*bu
 
   gui->setStylesheet("Assets/stylesheet.css");
 
-  textureManager->loadTexture("Assets/mine.png", MINE, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture("Assets/1.png", ONE, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture("Assets/2.png", TWO, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture("Assets/3.png", THREE, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture("Assets/4.png", FOUR, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture("Assets/5.png", FIVE, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture("Assets/6.png", SIX, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture("Assets/7.png", SEVEN, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture("Assets/8.png", EIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture("Assets/empty.png", EMPTY, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture("Assets/clean.png", NORMAL, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture("Assets/flag.png", FLAG, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(resources->getFilePath("Assets/mine.png").c_str(), MINE, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(resources->getFilePath("Assets/1.png").c_str(), ONE, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(resources->getFilePath("Assets/2.png").c_str(), TWO, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(resources->getFilePath("Assets/3.png").c_str(), THREE, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(resources->getFilePath("Assets/4.png").c_str(), FOUR, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(resources->getFilePath("Assets/5.png").c_str(), FIVE, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(resources->getFilePath("Assets/6.png").c_str(), SIX, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(resources->getFilePath("Assets/7.png").c_str(), SEVEN, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(resources->getFilePath("Assets/8.png").c_str(), EIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(resources->getFilePath("Assets/empty.png").c_str(), EMPTY, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(resources->getFilePath("Assets/clean.png").c_str(), NORMAL, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(resources->getFilePath("Assets/flag.png").c_str(), FLAG, BUTTON_WIDTH, BUTTON_HEIGHT);
 
   gtk_widget_show_all(this->window);
 }
@@ -51,7 +52,7 @@ void Game::startGame()
       currentMine->x = i;
       currentMine->y = j;
 
-      currentMine->isMine = (rand() % 100 < 3) ? true : false;
+      currentMine->isMine = (rand() % 100 < 18) ? true : false;
       if(currentMine->isMine == true) this->totalMines++;
 
       if(!currentMine->button)
