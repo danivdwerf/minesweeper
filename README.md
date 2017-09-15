@@ -9,4 +9,4 @@ We were free to chose which language an IDE we wanted to work in, so I chose to 
 MacOS installation:
 <br />
 Download the game <a href="http://freetimedev.com/resources/projects/Minesweeper/Minesweeper.dmg">here</a>,
-open de dmg file and drag it in your desired folder. If you can't open the game normally, right click and press open.
+open de dmg file and drag the Minesweeper app in your desired folder. If you can't open the game normally, right click and press open.
