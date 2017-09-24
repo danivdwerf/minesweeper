@@ -17,7 +17,7 @@ void Game::init(void(*keyCallback)(GtkWidget*, GdkEventKey*, gpointer), void(*bu
 
   this->test = buttonCallback;
 
-  gui->setStylesheet("Assets/stylesheet.css");
+  gui->setStylesheet(resources->getFilePath("Assets/stylesheet.css"));
 
   textureManager->loadTexture(resources->getFilePath("Assets/mine.png").c_str(), MINE, BUTTON_WIDTH, BUTTON_HEIGHT);
   textureManager->loadTexture(resources->getFilePath("Assets/1.png").c_str(), ONE, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -52,8 +52,9 @@ void Game::startGame()
       currentMine->x = i;
       currentMine->y = j;
 
-      currentMine->isMine = (rand() % 100 < 18) ? true : false;
-      if(currentMine->isMine == true) this->totalMines++;
+      currentMine->isMine = (rand() % 100 < 18);
+      if(currentMine->isMine == true)
+        this->totalMines++;
 
       if(!currentMine->button)
         currentMine->button = gui->createButton(this->grid, i, j, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -107,10 +108,10 @@ void Game::switchFlag(Button* currentMine)
 
 void Game::showBlocks(Button* currentMine)
 {
-  if(this->gameOver) return;
+  if(this->gameOver)
+    return;
   if(currentMine->isDown)
     return;
-
   if(currentMine->flagged)
     return;
 
