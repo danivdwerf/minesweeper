@@ -84,7 +84,7 @@ void Game::startGame()
       currentMine->x = i;
       currentMine->y = j;
 
-      currentMine->isMine = (rand() % 100 < 18);
+      currentMine->isMine = (rand() % 100 < 15);
       if(currentMine->isMine == true)
         this->totalMines++;
 
@@ -147,10 +147,7 @@ void Game::showBlocks(Button* currentMine)
     return;
 
   if(currentMine->isMine)
-  {
-    showMines();
     return;
-  }
 
   currentMine->isDown = true;
 
@@ -160,14 +157,37 @@ void Game::showBlocks(Button* currentMine)
   if(currentMine->nearbyMines)
     return;
 
-  if(currentMine->y > 0)
-    showBlocks(&this->field[currentMine->x][currentMine->y-1]);
-  if(currentMine->y < ROWS-1)
-    showBlocks(&this->field[currentMine->x][currentMine->y+1]);
-  if(currentMine->x > 0)
-    showBlocks(&this->field[currentMine->x-1][currentMine->y]);
+  //Right
   if(currentMine->x < COLUMNS-1)
     showBlocks(&this->field[currentMine->x+1][currentMine->y]);
+
+  //Below
+  if(currentMine->y < ROWS-1)
+    showBlocks(&this->field[currentMine->x][currentMine->y+1]);
+
+  //Left
+  if(currentMine->x > 0)
+    showBlocks(&this->field[currentMine->x-1][currentMine->y]);
+
+  //Above
+  if(currentMine->y > 0)
+    showBlocks(&this->field[currentMine->x][currentMine->y-1]);
+
+  //Right Below
+  if(currentMine->x < COLUMNS-1 && currentMine->y < ROWS-1)
+    showBlocks(&this->field[currentMine->x+1][currentMine->y+1]);
+
+  //Right Above
+  if(currentMine->x < COLUMNS-1 && currentMine->y > 0)
+    showBlocks(&this->field[currentMine->x+1][currentMine->y-1]);
+
+  //Left Below
+  if(currentMine->x > 0 && currentMine->y < ROWS-1)
+    showBlocks(&this->field[currentMine->x-1][currentMine->y+1]);
+
+  //Left Above
+  if(currentMine->x > 0 && currentMine->y > 0)
+    showBlocks(&this->field[currentMine->x-1][currentMine->y-1]);
 }
 
 void Game::showMines()

@@ -58,7 +58,7 @@ class Game
   private: int findConnectedMines(int, int);
   public: void switchFlag(Button*);
   public: void showBlocks(Button*);
-  private: void showMines();
+  public: void showMines();
   private: void swapImage(Button*);
   private: void checkForWin();
   private: void showPopup(const char*);
