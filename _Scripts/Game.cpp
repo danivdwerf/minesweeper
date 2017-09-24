@@ -88,8 +88,7 @@ void Game::startGame()
       if(currentMine->isMine == true)
         this->totalMines++;
 
-      if(!currentMine->button)
-        currentMine->button = gui->createButton(this->grid, i, j, BUTTON_WIDTH, BUTTON_HEIGHT);
+      currentMine->button = gui->createButton(this->grid, i, j, BUTTON_WIDTH, BUTTON_HEIGHT);
 
       gtk_widget_show(currentMine->button);
       gtk_button_set_image(GTK_BUTTON(currentMine->button), textureManager->getTexture(NORMAL));
