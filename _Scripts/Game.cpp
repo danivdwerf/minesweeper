@@ -4,7 +4,9 @@ Game::Game()
 {
   srand(time(NULL));
   this->gui = new GUI();
-  this->resources = new Resources();
+  #ifdef __APPLE__
+    this->resources = new Resources();
+  #endif
   this->textureManager = new TextureManager();
 }
 
@@ -17,20 +19,50 @@ void Game::init(void(*keyCallback)(GtkWidget*, GdkEventKey*, gpointer), void(*bu
 
   this->test = buttonCallback;
 
-  gui->setStylesheet(resources->getFilePath("Assets/stylesheet.css"));
+  std::string mineImagePath = "Assets/mine.png";
+  std::string oneImagePath = "Assets/1.png";
+  std::string twoImagePath = "Assets/2.png";
+  std::string threeImagePath = "Assets/3.png";
+  std::string fourImagePath = "Assets/4.png";
+  std::string fiveImagePath = "Assets/5.png";
+  std::string sixImagePath = "Assets/6.png";
+  std::string sevenImagePath = "Assets/7.png";
+  std::string eightImagePath = "Assets/8.png";
+  std::string emptyImagePath = "Assets/empty.png";
+  std::string cleanImagePath = "Assets/clean.png";
+  std::string flagImagePath = "Assets/flag.png";
+  std::string stylesheetPath = "Assets/stylesheet.css";
 
-  textureManager->loadTexture(resources->getFilePath("Assets/mine.png").c_str(), MINE, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture(resources->getFilePath("Assets/1.png").c_str(), ONE, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture(resources->getFilePath("Assets/2.png").c_str(), TWO, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture(resources->getFilePath("Assets/3.png").c_str(), THREE, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture(resources->getFilePath("Assets/4.png").c_str(), FOUR, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture(resources->getFilePath("Assets/5.png").c_str(), FIVE, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture(resources->getFilePath("Assets/6.png").c_str(), SIX, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture(resources->getFilePath("Assets/7.png").c_str(), SEVEN, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture(resources->getFilePath("Assets/8.png").c_str(), EIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture(resources->getFilePath("Assets/empty.png").c_str(), EMPTY, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture(resources->getFilePath("Assets/clean.png").c_str(), NORMAL, BUTTON_WIDTH, BUTTON_HEIGHT);
-  textureManager->loadTexture(resources->getFilePath("Assets/flag.png").c_str(), FLAG, BUTTON_WIDTH, BUTTON_HEIGHT);
+  #ifdef __APPLE__
+    mineImagePath = resources->getFilePath(mineImagePath);
+    oneImagePath = resources->getFilePath(oneImagePath);
+    twoImagePath = resources->getFilePath(twoImagePath);
+    threeImagePath = resources->getFilePath(threeImagePath);
+    fourImagePath = resources->getFilePath(fourImagePath);
+    fiveImagePath = resources->getFilePath(fiveImagePath);
+    sixImagePath = resources->getFilePath(sixImagePath);
+    sevenImagePath = resources->getFilePath(sevenImagePath);
+    eightImagePath = resources->getFilePath(eightImagePath);
+    emptyImagePath = resources->getFilePath(emptyImagePath);
+    cleanImagePath = resources->getFilePath(cleanImagePath);
+    flagImagePath = resources->getFilePath(flagImagePath);
+    stylesheetPath = resources->getFilePath(stylesheetPath);
+  #endif
+
+  gui->setStylesheet(stylesheetPath);
+
+  textureManager->loadTexture(mineImagePath.c_str(), MINE, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(oneImagePath.c_str(), ONE, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(twoImagePath.c_str(), TWO, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(threeImagePath.c_str(), THREE, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(fourImagePath.c_str(), FOUR, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(fiveImagePath.c_str(), FIVE, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(sixImagePath.c_str(), SIX, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(sevenImagePath.c_str(), SEVEN, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(eightImagePath.c_str(), EIGHT, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(emptyImagePath.c_str(), EMPTY, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(cleanImagePath.c_str(), NORMAL, BUTTON_WIDTH, BUTTON_HEIGHT);
+  textureManager->loadTexture(flagImagePath.c_str(), FLAG, BUTTON_WIDTH, BUTTON_HEIGHT);
 
   gtk_widget_show_all(this->window);
 }

@@ -1,8 +1,6 @@
-#include <iostream>
-
 #include "_Scripts/Game.h"
 
-Game* game = new Game();
+Game* game;
 
 void onButtonClick(GtkWidget* widget, GdkEventButton* event, gpointer data)
 {
@@ -30,7 +28,8 @@ void onKeyPress(GtkWidget* widget, GdkEventKey* event, gpointer data)
 int main(int argc, char* argv[])
 {
   gtk_init(&argc, &argv);
-
+  
+  game = new Game();
   game->init(onKeyPress, onButtonClick);
   game->startGame();
 

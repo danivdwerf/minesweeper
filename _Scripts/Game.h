@@ -16,7 +16,10 @@
 
 #include "gui.h"
 #include "TextureManager.h"
-#include "Resources.h"
+
+#ifdef __APPLE__
+  #include "Resources.h"
+#endif
 
 struct Button
 {
@@ -34,7 +37,9 @@ struct Button
 class Game
 {
   private: GUI* gui;
-  private: Resources* resources;
+  #ifdef __APPLE__
+    private: Resources* resources;
+  #endif
   private: TextureManager* textureManager;
 
   private: GtkWidget* window;

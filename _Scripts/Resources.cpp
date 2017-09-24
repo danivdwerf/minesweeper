@@ -1,3 +1,4 @@
+#ifdef __APPLE__
 #include "Resources.h"
 
 std::string Resources::getFilePath(std::string relativePath)
@@ -64,3 +65,4 @@ bool Resources::writeToFile(std::string path, std::string content)
   }
   catch(std::ofstream::failure e){return false;}
 }
+#endif
