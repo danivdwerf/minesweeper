@@ -1,1 +1,0 @@
-g++ main.cpp _Scripts/Resources.cpp _Scripts/gui.cpp _Scripts/Game.cpp _Scripts/TextureManager.cpp -o minesweeper `pkg-config --cflags --libs gtk+-3.0` -std=c++11 -mwindows
