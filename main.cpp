@@ -12,11 +12,6 @@ void onButtonClick(GtkWidget* widget, GdkEventButton* event, gpointer data)
   Button* clickedButton = (Button*) data;
   if(event->button != 3 )
   {
-    if(clickedButton->isMine)
-    {
-      game->showMines();
-      return;
-    }
     game->showBlocks(clickedButton);
     return;
   }

@@ -122,10 +122,12 @@ int Game::findConnectedMines(int x, int y)
 
 void Game::switchFlag(Button* currentMine)
 {
-  if(this->gameOver) return;
-  if(currentMine->isDown) return;
+  if(this->gameOver)
+    return;
+  if(currentMine->isDown)
+    return;
 
-  if(currentMine->flagged)
+  if(currentMine->flagged == true)
   {
     currentMine->flagged = false;
     gtk_button_set_image(GTK_BUTTON(currentMine->button), textureManager->getTexture(NORMAL));
@@ -141,13 +143,15 @@ void Game::showBlocks(Button* currentMine)
 {
   if(this->gameOver)
     return;
-  if(currentMine->isDown)
-    return;
   if(currentMine->flagged)
     return;
-
-  if(currentMine->isMine)
+  if(currentMine->isDown)
     return;
+  if(currentMine->isMine)
+  {
+    this->showMines();
+    return;
+  }
 
   currentMine->isDown = true;
 
